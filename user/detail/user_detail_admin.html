@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{common/layout_4block :: layout(~{::body/content()})}">
+<head>
+<title>会員詳細 | シェアードショップ</title>
+<meta charset="UTF-8" />
+</head>
+<body class="admin user_detail_admin">
+		<h2 class="title">会員詳細</h2>
+		<div class="user_detail_area">
+			<ul class="input_list">
+				<li>
+					<span class="input_title">メールアドレス</span>
+					<span class="input_value" th:text="${user.email}"></span>
+				</li>
+				<li>
+					<span class="input_title">氏名</span>
+					<span class="input_value" th:text="${user.name}"></span>
+				</li>
+				<li>
+					<span class="input_title">郵便番号</span>
+					<span class="input_value" th:text="${user.postalCode}"></span>
+				</li>
+				<li>
+					<span class="input_title">住所</span>
+					<span class="input_value" th:text="${user.address}"></span>
+				</li>
+				<li>
+					<span class="input_title">電話番号</span>
+					<span class="input_value" th:text="${user.phoneNumber}"></span>
+				</li>
+				<li>
+					<span class="input_title">権限</span>
+					<span  class="input_value" th:switch="${user.authority}">
+						<span th:case="0">システム管理者</span>
+						<span th:case="1">運用管理者</span>
+						<span th:case="2">一般会員</span>
+					</span>
+				</li>
+			</ul>
+		</div>
+
+		<div class="detail_button_area">
+			<form th:action="@{/user/list}" method="get">
+				<input type="submit" value="戻る" />
+			</form>
+			<form th:action="@{/user/update/input/admin}" method="post">
+				<input type="hidden" name="id" th:value="${user.id}" />
+				<input type="submit" value="変更" />
+			</form>
+			<form th:action="@{/user/delete/check/admin}" method="post" th:if="${user.authority != 0}" >
+				<input type="hidden" name="id" th:value="${user.id}" />
+				<input type="submit" value="削除" class="delete" />
+			</form>
+		</div>
+</body>
+</html>

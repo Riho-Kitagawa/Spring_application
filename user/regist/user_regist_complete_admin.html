@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{common/layout_4block :: layout(~{::body/content()})}">
+<head>
+<title>会員登録完了 | シェアードショップ</title>
+<meta charset="UTF-8" />
+</head>
+<body class="admin user_regist_complete_admin">
+		<h2 class="title">会員登録完了</h2>
+		<p class="complete_message">会員登録が完了しました。</p>
+		<p class="complete_link"><a th:href="@{/user/list}">会員一覧へ戻る</a></p>
+</body>
+</html>

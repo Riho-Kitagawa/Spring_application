@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{common/layout_5block :: layout(~{::title},~{::body})}">
+<head>
+<title>お届け先入力 | シェアードショップ</title>
+<meta charset="UTF-8" />
+</head>
+<body th:object="${addressForm}" class="user order_address_input" >
+	
+		<h2 class="title">お届け先入力</h2>
+		<div class="user_info_form_area">
+
+		<form method="post" th:action="@{/payment/input}"  >
+		<ul>
+			<li th:each="error : ${#fields.detailedErrors('*')}">
+           		 <span th:text="${error.message}" style="color:red;"></span>
+        	</li>
+        </ul>
+
+				<br />
+				<ul class="input_list">
+					<li><label> <span class="input_title"> 郵便番号 </span> <input
+							type="text" name="postalCode" th:value="${user.postalCode}" />
+					</label></li>
+					<li><label> <span class="input_title"> 住所 </span> <textarea
+								 name="address" th:field="${user.Address}" rows="6" ></textarea>
+					</label></li>
+					<li><label> <span class="input_title"> 氏名 </span> <input
+							type="text" name="name" th:value="${user.name}"/>
+					</label></li>
+					<li><label> <span class="input_title"> 電話番号 </span> <input
+							type="text" name="phoneNumber" th:value="${user.phoneNumber}" />
+					</label></li>
+				</ul>
+				<input type="submit" value="次へ" class="send_button" /> <input
+					type="hidden" name="backflg" value="false" />
+			</form>
+			<form th:action="@{/basket/list?page=0}">
+				<input type="submit" value="戻る" class="back_button" />
+			</form>
+		</div>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{common/layout_4block :: layout(~{::body/content()})}">
+<head>
+<title>会員変更確認 | シェアードショップ</title>
+<meta charset="UTF-8" />
+</head>
+<body class="admin user_update_check_admin">
+		<h2 class="title">会員変更確認</h2>
+		<p class="check_message">以下の内容で変更します。</p>
+		<div class="user_info_form_area">
+			<ul class="input_list">
+				<li>
+					<span class="input_title">メールアドレス</span>
+					<span class="input_value" th:text="${userForm.email}"></span>
+				</li>
+				<li>
+					<span class="input_title">パスワード</span>
+					<span class="input_value">********</span>
+				</li>
+				<li>
+					<span class="input_title">氏名</span>
+					<span class="input_value" th:text="${userForm.name}"></span>
+				</li>
+				<li>
+					<span class="input_title">郵便番号</span>
+					<span class="input_value" th:text="${userForm.postalCode}"></span>
+				</li>
+				<li>
+					<span class="input_title">住所</span>
+					<span class="input_value" th:text="${userForm.address}"></span>
+				</li>
+				<li>
+					<span class="input_title">電話番号</span>
+					<span class="input_value" th:text="${userForm.phoneNumber}"></span>
+				</li>
+				<li>
+					<span class="input_title">権限</span>
+					<span  class="input_value" th:switch="${userForm.authority}">
+						<span th:case="0">システム管理者</span>
+						<span th:case="1">運用管理者</span>
+						<span th:case="2">一般会員</span>
+					</span>
+				</li>
+			</ul>
+
+			<form method="post" th:action="@{/user/update/complete/admin}" th:object="${userForm}"  class="user_info_form">
+				<input type="hidden" name="id" th:value="${userForm.id}" />
+				<input type="hidden" name="email" th:value="${userForm.email}" />
+				<input type="hidden" name="password" th:value="${userForm.password}" />
+				<input type="hidden" name="name" th:value="${userForm.name}" />
+				<input type="hidden" name="postalCode" th:value="${userForm.postalCode}" />
+				<input type="hidden" name="address" th:value="${userForm.address}" />
+				<input type="hidden" name="phoneNumber" th:value="${userForm.phoneNumber}" />
+				<input type="hidden" name="authority" th:value="${userForm.authority}" />
+				<input type="submit" value="登録" class="send_button" />
+			</form>
+			<form th:action="@{/user/update/input/admin}" method="post">
+				<input type="hidden" name="backFlg" value="true" />
+				<input type="hidden" name="id" th:value="${userForm.id}" />
+				<input type="hidden" name="email" th:value="${userForm.email}" />
+				<input type="hidden" name="password" th:value="${userForm.password}" />
+				<input type="hidden" name="name" th:value="${userForm.name}" />
+				<input type="hidden" name="postalCode" th:value="${userForm.postalCode}" />
+				<input type="hidden" name="address" th:value="${userForm.address}" />
+				<input type="hidden" name="phoneNumber" th:value="${userForm.phoneNumber}" />
+				<input type="hidden" name="authority" th:value="${userForm.authority}" />
+				<input type="submit" value="戻る" class="back_button" />
+			</form>
+		</div>
+</body>
+</html>

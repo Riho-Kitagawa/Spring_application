@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{common/layout_4block :: layout(~{::body/content()})}">
+<head>
+<title>商品変更完了 | シェアードショップ</title>
+<meta charset="UTF-8" />
+</head>
+<body class="admin item_update_complete">
+		<h2 class="title">商品変更完了</h2>
+		<p class="complete_message">商品情報の変更が完了しました。</p>
+		<p class="complete_link"><a th:href="@{/item/detail/admin/{id}(id=${itemId})}">商品詳細へ戻る</a></p>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{common/layout_5block :: layout(~{::title},~{::body})}">
+<head>
+<title>注文内容最終確認 | シェアードショップ</title>
+<meta charset="UTF-8" />
+</head>
+
+<body class="user order_check">
+
+
+		<h2 class="title">注文内容最終確認</h2>
+		<br />
+<div th:each="errorMessage:${errorMessagesOrderItem}" >
+	<div th:text="${errorMessage}" style="color:red;"></div> 
+</div>
+<table class="list_table basket" th:if="${!#lists.isEmpty(session.cartItems)}">
+<tr>
+	<th>
+		商品名
+	</th>
+	<th>
+		商品画像
+	</th>
+	<th>
+		単価
+	</th>
+	<th>
+		数量
+	</th>
+	<th>
+		小計
+	</th>
+</tr>
+<tr th:each="items:${items}">
+	<td>
+		<a th:text="${items.name}"></a>
+	</td>
+	<td class="image">
+		<img th:if="${items.image != null}" th:src="@{/img/{image}(image=${items.image})}" style="height: 80px;"></img>
+		<img th:if="${items.image == null}" th:src="@{/img/common/no_image.jpg}" style="height: 80px;"></img>
+	</td>
+		<td th:text="${items.price}"></td>
+		<td th:text="${items.orderNum}"></td>
+		<td th:text="${items.price}"></td>
+	</tr>
+					<tr>
+						<td colspan="3"></td>
+						<td class="total">合計</td>
+						<td class="total" th:text="${total}"></td>
+					</tr>
+		</table>
+		<div class="user_info_form_area">
+			<table class="detail_table address">
+				<caption class="table_caption">お届け先</caption>
+				<tr>
+					<th>郵便番号</th>
+					<td th:text="${user.postalCode}"></td>
+				</tr>
+				<tr>
+					<th>住所</th>
+					<td th:text="${user.address}"></td>
+				</tr>
+				<tr>
+					<th>氏名</th>
+					<td th:text="${user.name}"></td>
+				</tr>
+				<tr>
+					<th>電話番号</th>
+					<td th:text="${user.phoneNumber}"></td>
+				</tr>
+			</table>
+			<table class="detail_table pay">
+				<caption class="table_caption">お支払い方法</caption>
+				<tr>
+					<th>お支払い方法</th>
+					<td><div th:switch="${user.payMethod}">
+					<span th:case="1">クレジットカード</span>
+					<span th:case="2">銀行振り込み</span>
+					<span th:case="3">着払い</span>
+					<span th:case="4">電子マネー</span>
+					<span th:case="5">コンビニ決済</span>
+					</div></td>
+				</tr>
+			</table>
+
+			<form th:if="!${#lists.isEmpty(items)}"method="post" th:action="@{/order/complete}">
+					<input type="hidden" name="items" th:value="${items}" />
+					<input type="hidden" name="postalCode" th:value="${user.postalCode}" /> <input
+					type="hidden" name="address" th:value="${user.address}" /> <input
+					type="hidden" name="name" th:value="${user.name}" /> <input type="hidden"
+					name="phoneNumber" th:value="${user.phoneNumber}"/> <input type="hidden"
+					name="payMethod" th:value="${user.payMethod}" /> <input class="send_button"
+					type="submit" value="ご注文の確定" />
+			</form>
+			<form method="post" th:action="@{/payment/input}" class="update">
+				<input type="hidden" name="postalCode" th:value="${user.postalCode}" /> <input
+					type="hidden" name="address" th:value="${user.address}" /> <input
+					type="hidden" name="name" th:value="${user.name}" /> <input type="hidden"
+					name="phoneNumber" th:value="${user.phoneNumber}" /> <input type="hidden"
+					name="payMethod" th:value="${user.payMethod}" /> <input type="hidden" name="backflg"
+					value="true" /> <input class="back_button" type="submit"
+					value="戻る" />
+			</form>
+		</div>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{common/layout_4block :: layout(~{::body/content()})}">
+<head>
+<title>会員一覧 | シェアードショップ</title>
+<meta charset="UTF-8" />
+</head>
+<body class="admin user_list">
+		<h2 class="title">会員一覧</h2>
+		<form th:action="@{/user/regist/input/admin}" class="sign_up_form">
+			<input type="submit" value="会員新規登録" class="menu_button" />
+		</form>
+		<table class="list_table" th:if="!${#lists.isEmpty(users)}">
+			<tr>
+				<th>会員氏名</th>
+				<th>メールアドレス</th>
+				<th>操作</th>
+				
+			</tr>
+			<tr th:each="user: ${users}">
+				<td><a th:href="@{/user/detail/admin/{id}(id=${user.id})}"
+					th:text="${user.name}"></a></td>
+				<td th:text="${user.email}"></td>
+				<td>
+				<form method="post" th:action="@{/user/update/input/admin}">
+					<input type="hidden" name="id" th:value="${user.id}"/>
+					<input type="hidden" name="backflg" th:value="0" />
+					<input type="submit" value="変更"/>
+				</form>
+				<form method="post" th:action="@{/user/delete/check/admin}" th:if="${user.authority!=0}">
+					<input type="hidden" name="id" th:value="${user.id}"/>
+					<input type="submit" value="削除" class="delete"/>
+				</form>
+				</td>
+			</tr>
+		</table>
+		<ul class="paging" th:if="!${#lists.isEmpty(users)}">
+			<li th:class="${pages.first} ? 'disabled':''" >
+				<span th:if="${pages.first}">&lt;&lt;</span>
+				<a th:if="${not pages.first}" th:href="@{${url}(page=0)}">&lt;&lt;</a>
+			</li>
+			<li th:each='i : ${#numbers.sequence(0, pages.totalPages-1)}'
+				th:class="(${i}==${pages.number})? 'active' : ''" >
+				<span th:if='${i}==${pages.number}' th:text='${i+1}'>1</span>
+				<a th:if='${i}!=${pages.number}' th:href="@{${url}(page=${i})}">
+					<span th:text='${i+1}'>1</span>
+				</a>
+			</li>
+			<li th:class="${pages.last} ? 'disabled':''" >
+				<span th:if="${pages.last}">&gt;&gt;</span>
+				<a th:if="${not pages.last}"
+					th:href="@{${url}(page=(${pages.totalPages}-1))}">&gt;&gt;</a>
+			</li>
+		</ul>
+</body>
+</html>

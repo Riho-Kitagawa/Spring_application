@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{common/layout_5block :: layout(~{::title}, ~{::body})}">
+<head>
+<title>会員詳細 | シェアードショップ</title>
+<meta charset="UTF-8" />
+</head>
+<body class="user user_detail">
+		<h2 class="title">会員詳細</h2>
+				<div class="user_detail_area">
+					<ul class="input_list">
+						<li>
+							<span class="input_title">メールアドレス</span>
+							<span class="input_value" th:text="${user.email}"></span>
+						</li>
+						<li>
+							<span class="input_title" >氏名</span>
+							<span class="input_value" th:text="${user.name}"></span>
+						</li>
+						<li>
+							<span class="input_title">郵便番号</span>
+							<span class="input_value" th:text="${user.postalCode}">
+							</span>
+						</li>
+						<li>
+							<span class="input_title">住所</span>
+							<span class="input_value" th:text="${user.address}">
+							</span>
+						</li>
+						<li>
+							<span class="input_title">電話番号</span>
+							<span class="input_value" th:text="${user.phoneNumber}">
+							</span>
+						</li>
+					</ul>
+				</div>
+				<div class="detail_button_area">
+					<form action="/shared_shop/">
+						<input type="submit" value="戻る" />
+					</form>
+					<form method="post" action="/shared_shop/user/update/input">
+						<input type="hidden" name="authority" value="2" />
+						<input type="hidden" name="id" th:value="${user.id}" />
+						<input type="submit" value="変更" />
+					</form>
+					<form method="post" action="/shared_shop/user/delete/check">
+						<input type="hidden" name="authority" value="2" />
+						<input type="hidden" name="id" th:value="${user.id}" />
+						<input type="submit" value="退会" class="delete" />
+					</form>
+				</div>
+</body>
+</html>

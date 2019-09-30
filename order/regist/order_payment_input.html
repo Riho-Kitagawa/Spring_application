@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{common/layout_5block :: layout(~{::title},~{::body})}">
+<head>
+<title>お支払い方法選択 | シェアードショップ</title>
+<meta charset="UTF-8" />
+</head>
+
+<body class="user order_payment_input">
+						<h2 class="title">
+					お支払い方法選択
+				</h2>
+				<div class="user_info_form_area">
+					<form method="post" th:action="@{/order/check}">
+						<ul class="payment_method_select">
+							<li>
+								<label class="radio_label">
+									<input type="radio" name="payMethod" value="1"
+									checked="checked"/>
+									クレジットカード
+								</label>
+							</li>
+							<li>
+								<label class="radio_label">
+									<input type="radio" name="payMethod" value="2" />
+									銀行振り込み
+								</label>
+							</li>
+							<li>
+								<label class="radio_label">
+									<input type="radio" name="payMethod" value="3" />
+									着払い
+								</label>
+							</li>
+							<li>
+								<label class="radio_label">
+									<input type="radio" name="payMethod" value="4" />
+									電子マネー
+								</label>
+							</li>
+							<li>
+								<label class="radio_label">
+									<input type="radio" name="payMethod" value="5" />
+									コンビニ決済
+								</label>
+							</li>
+						</ul>
+						<input type="hidden" name="postalCode" th:value="${user.postalCode}" />
+						<input type="hidden" name="address" th:value="${user.address}" />
+						<input type="hidden" name="name" th:value="${user.name}" />
+						<input type="hidden" name="phoneNumber" th:value="${user.phoneNumber}" />
+						<input type="submit" class="send_button" value="次へ" />
+					</form>
+					<form method="post" th:action="@{/address/input}" class="update">
+						<input type="hidden" name="postalCode" th:value="${user.postalCode}" />
+						<input type="hidden" name="address" th:value="${user.address}" />
+						<input type="hidden" name="name" th:value="${user.name}" />
+						<input type="hidden" name="phoneNumber" th:value="${user.phoneNumber}" />
+						<input type="hidden" name="backflg" value="true" />
+						<input type="submit" class="back_button" value="戻る" />
+					</form>
+				</div>
+	
+</body>
+</html>

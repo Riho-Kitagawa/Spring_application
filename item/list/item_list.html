@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{common/layout_5block :: layout(~{::title}, ~{::body})}">
+<head>
+<title>商品一覧 | シェアードショップ</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/layout.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/stylesheet.css}" />
+</head>
+<body class="user item_list">
+
+	<h2 class="title">商品一覧</h2>
+
+	<!-- listにitemsがセットされていなかったら、メッセージを送る -->
+	<div th:if="${#lists.isEmpty(items)}">
+		<p th:text="#{itemList.none}"></p>
+	</div>
+
+	<!-- そうでなければ、通常通り表示-->
+	<div th:if="!${#lists.isEmpty(items)}" class="sorted_by">
+		<span th:if="${sortType}==1"> 新着順 </span> <span th:if="${sortType}!=1">
+			<th:block th:switch="${refine}">
+				<a th:case="all" th:href="@{/item/list/1}">新着順</a>
+				<a th:case="category"
+					th:href="@{/item/list/category/1(categoryId=${categoryId})}">新着順</a>
+				<a th:case="price"
+					th:href="@{/item/list/price/1(min=${min},max=${max})}">新着順</a>
+			</th:block>
+		</span>
+		<span th:if="${sortType}==2"> 売れ筋順 </span> <span
+			th:if="${sortType}!=2"> <th:block th:switch="${refine}">
+				<a th:case="all" th:href="@{/item/list/2}">売れ筋順</a>
+				<a th:case="category"
+					th:href="@{/item/list/category/2(categoryId=${categoryId})}">売れ筋順</a>
+				<a th:case="price"
+					th:href="@{/item/list/price/2(min=${min},max=${max})}">売れ筋順</a>
+			</th:block>
+		</span>
+	</div>
+
+
+	<table class="list_table item_list" th:if="!${#lists.isEmpty(items)}">
+		<tr>
+			<th>商品画像</th>
+			<th>商品名</th>
+			<th>価格</th>
+			<th>カテゴリ</th>
+		</tr>
+
+		<!--/* 商品情報 */-->
+		<tr th:each="item: ${items}">
+			<td class="image"><img th:if="${item.image != null}"
+				th:src="@{/img/{image}(image=${item.image})}" style="height: 80px;"></img>
+				<img th:if="${item.image == null}"
+				th:src="@{/img/common/no_image.jpg}" style="height: 80px;"></img></td>
+			<td><a th:href="@{/item/detail/{id}(id=${item.id})}"
+				th:text="${item.name}"></a></td>
+			<td th:text="${item.price}"></td>
+			<td th:text="${item.categoryName}"></td>
+		</tr>
+	</table>
+	<!--/* 商品情報 */-->
+
+	<!--/* ページング 【カテゴリ検索】*/-->
+	<th:block th:if="${categoryId} !=null">
+		<ul class="paging" th:if="!${#lists.isEmpty(items)}">
+			<li th:class="${pages.first} ? 'disabled':''"><span
+				th:if="${pages.first}">&lt;&lt;</span> <a th:if="${not pages.first}"
+				th:href="@{${url}(page=0,sortType=${sortType}, categoryId=${categoryId})}">&lt;&lt;</a>
+			</li>
+			<li th:each='i : ${#numbers.sequence(0, pages.totalPages-1)}'
+				th:class="(${i}==${pages.number})? 'active' : ''"><span
+				th:if='${i}==${pages.number}' th:text='${i+1}'>1</span> <a
+				th:if='${i}!=${pages.number}'
+				th:href="@{${url}(page=${i},sortType=${sortType}, categoryId=${categoryId})}">
+					<span th:text='${i+1}'>1</span>
+			</a></li>
+			<li th:class="${pages.last} ? 'disabled':''"><span
+				th:if="${pages.last}">&gt;&gt;</span> <a th:if="${not pages.last}"
+				th:href="@{${url}(page	=(${pages.totalPages}-1),sortType=${sortType}, categoryId=${categoryId})}">&gt;&gt;</a>
+			</li>
+		</ul>
+	</th:block>
+
+	<!--/* ページング 【価格帯検索】*/-->
+	<th:block th:if="${min !=null}">
+		<ul class="paging" th:if="!${#lists.isEmpty(items)}">
+			<li th:class="${pages.first} ? 'disabled':''"><span
+				th:if="${pages.first}">&lt;&lt;</span> <a th:if="${not pages.first}"
+				th:href="@{${url}(page=0, sortType=${sortType}, min=${min}, max=${max})}">&lt;&lt;</a>
+			</li>
+			<li th:each='i : ${#numbers.sequence(0, pages.totalPages-1)}'
+				th:class="(${i}==${pages.number})? 'active' : ''"><span
+				th:if='${i}==${pages.number}' th:text='${i+1}'>1</span> <a
+				th:if='${i}!=${pages.number}'
+				th:href="@{${url}(page=${i}, sortType=${sortType}, min=${min}, max=${max})}">
+					<span th:text='${i+1}'>1</span>
+			</a></li>
+			<li th:class="${pages.last} ? 'disabled':''"><span
+				th:if="${pages.last}">&gt;&gt;</span> <a th:if="${not pages.last}"
+				th:href="@{${url}(page	=(${pages.totalPages}-1), sortType=${sortType}, min=${min}, max=${max})}">&gt;&gt;</a>
+			</li>
+		</ul>
+	</th:block>
+
+	<!--/* ページング 【ただの新着順】*/-->
+	<th:block th:if="${categoryId ==null && min ==null}">
+		<ul class="paging" th:if="!${#lists.isEmpty(items)}">
+		
+			<li th:class="${pages.first} ? 'disabled':''"><span
+				th:if="${pages.first}">&lt;&lt;</span> <a th:if="${not pages.first}"
+				th:href="@{${url}(page=0, sortType=${sortType})}">&lt;&lt;</a></li>
+			
+			<li th:each='i : ${#numbers.sequence(0, pages.totalPages-1)}'
+				th:class="(${i}==${pages.number})? 'active' : ''"><span
+				th:if='${i}==${pages.number}' th:text='${i+1}'>1</span> <a
+				th:if='${i}!=${pages.number}'
+				th:href="@{${url}(page=${i}, sortType=${sortType})}"> <span
+					th:text='${i+1}'>1</span>
+			</a></li>
+			
+			<li th:class="${pages.last} ? 'disabled':''"><span
+				th:if="${pages.last}">&gt;&gt;</span> <a th:if="${not pages.last}"
+				th:href="@{${url}(page=(${pages.totalPages}-1), sortType=${sortType})}">&gt;&gt;</a></li>
+			</li>
+		</ul>
+	</th:block>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{common/layout_5block :: layout(~{::title}, ~{::body})}">
+<head>
+<title>会員変更入力 | シェアードショップ</title>
+<meta charset="UTF-8" />
+</head>
+<body class="user user_update_input">
+	<h2 class="title">会員変更入力</h2>
+		<div class="user_info_form_area">
+			<form method="post" th:action="@{/user/update/check}"  th:object="${userForm}" class="user_info_form">
+			<ul th:if="${#fields.hasErrors('*')}"  th:class="input_list" >
+  				<li th:each="err : ${#fields.errors('*')}" th:text="${err}" th:class="error_list" ></li>
+			</ul>
+
+				<ul class="input_list">
+					<li>
+						<label>
+							<span class="input_title">メールアドレス</span>
+							<input type="text" name="email" th:value="${user.email}"/>
+						</label>
+					</li>
+					<li>
+						<label>
+							<span class="input_title">パスワード</span>
+							<input type="password" name="password" th:value="${user.password}"/>
+						</label>
+					</li>
+					<li>
+						<label>
+							<span class="input_title">氏名</span>
+							<input type="text" name="name" th:value="${user.name}"/>
+						</label>
+					</li>
+					<li>
+						<label>
+							<span class="input_title">郵便番号</span>
+							<input type="text" name="postalCode" th:value="${user.postalCode}"/>
+						</label>
+					</li>
+					<li>
+						<label>
+							<span class="input_title">住所</span>
+							<textarea name="address" rows="6" th:text="${user.address}"></textarea>
+						</label>
+					</li>
+					<li>
+						<label>
+							<span class="input_title">電話番号</span>
+							<input type="text" name="phoneNumber" th:value="${user.phoneNumber}"/>
+						</label>
+					</li>
+				</ul>
+				<input type="hidden" name="authority" value="2" />
+				<input type="hidden" name="id" th:value="${user.id}"/>
+				<input type="submit" value="確認" class="send_button" />
+			</form>
+			<form th:action="@{/user/detail/{id}(id=${session.user.id})}" th:object="${userForm}"  class="user_info_form">
+				<input type="submit" value="戻る" class="back_button" />
+			</form>
+		</div>
+</body>
+</html>

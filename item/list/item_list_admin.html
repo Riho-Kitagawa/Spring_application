@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{common/layout_4block :: layout(~{::body/content()})}">
+<head>
+<title>商品一覧 | シェアードショップ</title>
+<meta charset="UTF-8" />
+</head>
+<body class="admin item_list_admin" th:object="${loginForm}">
+
+		<h2 class="title">商品一覧</h2>
+		<form th:action="@{/item/regist/input}" class="sign_up_form">
+			<input type="submit" value="商品新規登録" class="menu_button" />
+		</form>
+
+		<div th:if="${#lists.isEmpty(items)}">
+			<p th:text="#{itemListAdmin.none}"></p>
+		</div>
+		<table class="list_table item_list"  th:if="!${#lists.isEmpty(items)}">
+			<tr>
+				<th>ID</th>
+				<th>商品名</th>
+				<th>価格</th>
+				<th>カテゴリ</th>
+				<th>操作</th>
+			</tr>
+			<!--/* 商品情報 */-->
+			<tr th:each="item: ${items}">
+				<td th:text="${item.id}"></td>
+				<td><a th:href="@{/item/detail/admin/{id}(id=${item.id})}"
+					th:text="${item.name}"></a></td>
+				<td th:text="${item.price}"></td>
+				<td th:text="${item.categoryName}"></td>
+				<td>
+					<form method="post" th:action="@{/item/update/input}">
+						<input type="hidden" name="id" th:value="${item.id}" />
+						<input type="submit" value="変更" />
+					</form>
+					<form method="post" th:action="@{/item/delete/check}">
+						<input type="hidden" name="id" th:value="${item.id}" />
+						<input type="submit" value="削除" class="delete" />
+					</form>
+				</td>
+			</tr>
+		</table>
+		<ul class="paging" th:if="!${#lists.isEmpty(items)}">
+			<li th:class="${pages.first} ? 'disabled':''" >
+				<span th:if="${pages.first}">&lt;&lt;</span>
+				<a th:if="${not pages.first}" th:href="@{${url}(page=0)}">&lt;&lt;</a>
+			</li>
+			<li th:each='i : ${#numbers.sequence(0, pages.totalPages-1)}'
+				th:class="(${i}==${pages.number})? 'active' : ''" >
+				<span th:if='${i}==${pages.number}' th:text='${i+1}'>1</span>
+				<a th:if='${i}!=${pages.number}' th:href="@{${url}(page=${i})}">
+					<span th:text='${i+1}'>1</span>
+				</a>
+			</li>
+			<li th:class="${pages.last} ? 'disabled':''" >
+				<span th:if="${pages.last}">&gt;&gt;</span>
+				<a th:if="${not pages.last}"
+					th:href="@{${url}(page=(${pages.totalPages}-1))}">&gt;&gt;</a>
+			</li>
+		</ul>
+
+	
+</body>
+</html>
